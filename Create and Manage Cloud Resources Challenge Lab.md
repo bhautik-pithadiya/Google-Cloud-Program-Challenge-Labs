@@ -27,6 +27,7 @@ gcloud compute instances create <Instance name> \
 
 * Run the following from the **Cloud Terminal**:
 * Change **Firewall Rule** in <>
+* Change **Port** in <>
 
 ```yaml
 gcloud container clusters create nucleus-backend \
@@ -100,7 +101,7 @@ gcloud compute target-http-proxies create http-lb-proxy \
 gcloud compute forwarding-rules create http-content-rule \
         --global \
         --target-http-proxy http-lb-proxy \
-        --ports 80
+        --ports <PORT>
 
 gcloud compute forwarding-rules list
 ```
