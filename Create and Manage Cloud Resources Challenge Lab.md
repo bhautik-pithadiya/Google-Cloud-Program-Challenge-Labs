@@ -43,7 +43,7 @@ kubectl create deployment hello-server \
 
 kubectl expose deployment hello-server \
           --type=LoadBalancer \
-          --port 8080
+          --port <PORT>
 ```
 
 ### Task 3: Setup an HTTP load balancer
@@ -101,7 +101,7 @@ gcloud compute target-http-proxies create http-lb-proxy \
 gcloud compute forwarding-rules create http-content-rule \
         --global \
         --target-http-proxy http-lb-proxy \
-        --ports <PORT>
+        --ports 80
 
 gcloud compute forwarding-rules list
 ```
