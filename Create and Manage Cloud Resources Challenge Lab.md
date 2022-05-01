@@ -26,7 +26,6 @@ gcloud compute instances create <Instance name> \
 ### Task 2: Create a Kubernetes service cluster
 
 * Run the following from the **Cloud Terminal**:
-* Change **Firewall Rule** in <>
 * Change **Port** in <>
 
 ```yaml
@@ -49,6 +48,7 @@ kubectl expose deployment hello-server \
 ### Task 3: Setup an HTTP load balancer
 
 * Run the following from the **Cloud Terminal**:
+* Change **Firewall Rule** in <>
 
 ```yaml
 cat << EOF > startup.sh
