@@ -11,7 +11,7 @@ As soon as you sit down at your desk and open your new laptop you receive severa
 ### Task 1: Create a project jumphost instance
 
 * Run the following from the **Cloud Terminal**:
-* Change Instance Name in <>
+* Change **Instance Name** in <>
 
 ```yaml
 gcloud compute instances create <Instance name> \
