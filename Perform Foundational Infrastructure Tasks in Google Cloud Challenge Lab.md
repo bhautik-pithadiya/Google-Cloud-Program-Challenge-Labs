@@ -148,4 +148,4 @@ exports.thumbnail = (event, context) => {
 ### Task 4: Remove the previous cloud engineer
 
 1. Navigation menu > **IAM & Admin** > IAM
-2. Search for the "**Username 2**" > Edit > Delete Role
+2. Search for the "**Username 2**" > Edit > Delete Role.
