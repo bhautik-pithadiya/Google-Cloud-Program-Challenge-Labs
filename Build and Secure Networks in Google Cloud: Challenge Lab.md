@@ -12,18 +12,18 @@ In this lab there is no command line instructions, you have to just use the **Go
   ->  Task 6 : SSH to bastion host via IAP and juice-shop via bastion.<br>
  
 
-## Solving tasks
+### Solving tasks
 
-### Task 1 : Remove the overly permissive rules
+## Task 1 : Remove the overly permissive rules
 
 ```yaml
 gcloud compute firewall-rules delete open-access
 ```
-### Task 2 : Start the bastion host instance
+## Task 2 : Start the bastion host instance
 
 * Go to Compute Engine and start **Bastion** instance
 
-### Task 3 : Create a firewall rule that allows SSH (tcp/22) from the IAP service and add network tag on bastion
+## Task 3 : Create a firewall rule that allows ***SSH (tcp/22)*** from the IAP service and add network tag on bastion
 
 * Replace the **"[NETWORK TAG]"** with the network tag provided in the lab.
 
@@ -34,7 +34,7 @@ gcloud compute firewall-rules create ssh-ingress --allow=tcp:22 --source-ranges 
 gcloud compute instances add-tags bastion --tags=[NETWORK TAG-1] --zone=us-central1-b
 ```
 
-### Task 4 : Create a firewall rule that allows traffic on HTTP (tcp/80) to any address and add network tag on juice-shop
+## Task 4 : Create a firewall rule that allows traffic on ***HTTP (tcp/80)*** to any address and add network tag on juice-shop
 
 * Replace the **"[NETWORK TAG-2]"** with the network tag provided in the lab.
 
@@ -44,21 +44,25 @@ gcloud compute firewall-rules create http-ingress --allow=tcp:80 --source-ranges
 ```yaml
 gcloud compute instances add-tags juice-shop --tags=[NETWORK TAG-2] --zone=us-central1-b
 ```
-### Task 5 : Create a firewall rule that allows traffic on SSH (tcp/22) from acme-mgmt-subnet network address and add network tag on juice-shop
+## Task 5 : Create a firewall rule that allows traffic on ***SSH (tcp/22)*** from acme-mgmt-subnet network address and add network tag on juice-shop
 
 * Replace the **"[NETWORK TAG-3]"** with the network tag provided in the lab.
 
 ```yaml
-gcloud compute firewall-rules create internal-ssh-ingress --allow=tcp:22 --source-ranges 192[dot]168[dot]10[dot]0/24 --target-tags [NETWORK TAG-3] --network acme-vpc
+gcloud compute firewall-rules create internal-ssh-ingress --allow=tcp:22 --source-ranges 192.168.10.0/24 --target-tags [NETWORK TAG-3] --network acme-vpc
 ```
 ```yaml
 gcloud compute instances add-tags juice-shop --tags=[NETWORK TAG-3] --zone=us-central1-b
 ```
 
-### Task 6 : SSH to bastion host via IAP and juice-shop via bastion
+#### Task 6 : SSH to bastion host via IAP and juice-shop via bastion
 
-* In Compute Engine -> VM Instances page, click the SSH button for the bastion host. Then SSH to juice-shop by
-
+* In Compute Engine -> VM Instances page, click the SSH button for the **Bastion** host.
+* Write the below code in **SSH** terminal
 ```yaml
-ssh [Internal IP address of juice-shop]
+gcloud compute ssh juice-shop --intenal-ip
 ```
+* If asked for **Passphrase**  -->   Hit *Enter* twice, then Y.
+
+
+## **✨Congratulations✨** you have completed Your Challenge lab Succesfully.🎉🎉
