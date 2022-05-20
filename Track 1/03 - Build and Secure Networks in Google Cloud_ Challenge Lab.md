@@ -60,7 +60,7 @@ gcloud compute instances add-tags juice-shop --tags=[NETWORK TAG-3] --zone=us-ce
 * In Compute Engine -> VM Instances page, click the SSH button for the **Bastion** host.
 * Write the below code in **SSH** terminal
 ```yaml
-gcloud compute ssh juice-shop --intenal-ip
+gcloud compute ssh juice-shop --internal-ip
 ```
 * If asked for **Passphrase**  -->   Hit *Enter* twice, then Y.
 
