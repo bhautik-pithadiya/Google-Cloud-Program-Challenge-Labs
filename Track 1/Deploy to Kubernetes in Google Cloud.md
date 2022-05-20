@@ -18,7 +18,7 @@ In this lab there is no command line instructions, you have to just use the **Go
 
 ## Task 1 : Create a Docker image and store the Dockerfile
 
-* Run the following Code in the **Cloud Shell Terminal**
+* Run the following Code in the <ins>**Cloud Shell Terminal**</ins>
 
 ```yaml
 gcloud auth list
@@ -33,7 +33,8 @@ RUN go install -v
 ENTRYPOINT ["app","-single=true","-port=8080"]
 EOF
 ```
-* Change **Docker Image** and **Tag Name**
+
+* Change <ins>**Docker Image**</ins> and <ins>**Tag Name**</ins>
 
 ```yaml
 docker build -t <Docker Image>:<Tag Name> .
@@ -42,7 +43,6 @@ cd marking
 ./step1_v2.sh
 ```
 
-
 ## Task 2 : Test the created Docker image.
 
 ```yaml
@@ -50,10 +50,15 @@ cd ..
 cd valkyrie-app
 ```
 
-* Change **Docker Image** and **Tag Name**
+* Change <ins>**Docker Image**</ins> and <ins>**Tag Name**</ins>
 
 ```yaml
 docker run -p 8080:8080 <Docker Image>:<Tag Name> &
+```
+* Once you have your container running, and before clicking **Check my progress**, run *step2_v2.sh* to perform the local check of your work. 
+* After you get a successful response from the local marking you can check your progress.
+
+```yaml
 cd ..
 cd marking
 ./step2_v2.sh
@@ -67,42 +72,105 @@ cd ..
 cd valkyrie-app
 ```
 
-* Change **Docker Image** and **Tag Name**
+* Change <ins>**Docker Image**</ins> and <ins>**Tag Name**</ins>
 
 ```yaml
 docker tag <Docker Image>:<Tag Name> gcr.io/$GOOGLE_CLOUD_PROJECT/<Docker Image>:<Tag Name>
+```
+```yaml
 docker push gcr.io/$GOOGLE_CLOUD_PROJECT/<Docker Image>:<Tag Name>
 ```
 
 ## Task 4 : Create and expose a deployment in Kubernetes.
 
-* Replace the **"[NETWORK TAG-2]"** with the network tag provided in the lab.
+* Change <ins>**Docker Image**</ins> and <ins>**Tag Name**</ins>
 
 ```yaml
-gcloud compute firewall-rules create http-ingress --allow=tcp:80 --source-ranges 0.0.0.0/0 --target-tags [NETWORK TAG-2] --network acme-vpc
-```
-```yaml
-gcloud compute instances add-tags juice-shop --tags=[NETWORK TAG-2] --zone=us-central1-b
-```
-## Task 5 : Create a firewall rule that allows traffic on ***SSH (tcp/22)*** from acme-mgmt-subnet network address and add network tag on juice-shop
-
-* Replace the **"[NETWORK TAG-3]"** with the network tag provided in the lab.
-
-```yaml
-gcloud compute firewall-rules create internal-ssh-ingress --allow=tcp:22 --source-ranges 192.168.10.0/24 --target-tags [NETWORK TAG-3] --network acme-vpc
-```
-```yaml
-gcloud compute instances add-tags juice-shop --tags=[NETWORK TAG-3] --zone=us-central1-b
+sed -i s#IMAGE_HERE#gcr.io/$GOOGLE_CLOUD_PROJECT/<Docker Image>:<Tag Name>#g k8s/deployment.yaml
+gcloud container clusters get-credentials valkyrie-dev --zone us-east1-d
+kubectl create -f k8s/deployment.yaml
+kubectl create -f k8s/service.yaml
 ```
 
-#### Task 6 : SSH to bastion host via IAP and juice-shop via bastion
+## Task 5 : Update the deployment with a new version of valkyrie-app.
 
-* In Compute Engine -> VM Instances page, click the SSH button for the **Bastion** host.
-* Write the below code in **SSH** terminal
+
 ```yaml
-gcloud compute ssh juice-shop --intenal-ip
+git merge origin/kurt-dev
+kubectl edit deployment valkyrie-dev
 ```
-* If asked for **Passphrase**  -->   Hit *Enter* twice, then Y.
+* Press <ins>**i**</ins> to edit in the editor then
+* change replicas from 1 to **Replicas Count** in two places
+* change <ins>**Tag Name**</ins> to <ins>**Updated Version**</ins> in two places
+* After changing, press <ins>**ESC**</ins> than type <ins>**:wq**</ins> to close the editor
+
+```yaml
+docker build -t gcr.io/$GOOGLE_CLOUD_PROJECT/<Docker Image>:<Updated Version> .
+docker push gcr.io/$GOOGLE_CLOUD_PROJECT/<Docker Image>:<Updated Version>
+```
+
+### Task 6 : Create a pipeline in Jenkins to deploy your app.
+
+```yaml
+docker ps
+```
+```yaml
+docker kill <take container_id from above command>
+```
+```yaml
+export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/component=jenkins-master" -l "app.kubernetes.io/instance=cd" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward $POD_NAME 8080:8080 >> /dev/null &
+printf $(kubectl get secret cd-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
+
+```
+
+* Note the Output.
+* Open Jenkins -- Web PreView -> Preview on port 8080.
+
+```yaml
+  Username : admin
+  Password : {Code output from previous command} 
+```
+* Go through the following:
+
+* Manage Jenkins -> Manage Credentials -> Jenkins -> Global credentials (unrestricted) -> Add credentials -> Kind: Google Service Account from metadata -> OK
+
+* Jenkins -> New Item -> Name : valkyrie-app -> Pipeline -> Pipeline script from SCM -> Set SCM to git -> OK
+
+* Pipeline -> Script: Pipeline script from SCM -> SCM: Git
+
+* Repository URL: {find it using command} -> Credentials : {Select Project id(eg qwiklab.......)} 
+```yaml 
+gcloud source repos list  #Run in the Cloud Shell Terminal
+```
+
+* Apply -> Save
+
+* Run the Following Code in Cloud Shell Terminal.
+
+```yaml
+sed -i "s/green/orange/g" source/html.go
+sed -i "s/YOUR_PROJECT/$GOOGLE_CLOUD_PROJECT/g" Jenkinsfile
+```
+
+* Enter Your Cloud registered Email.
+* Enter Username -> <ins>**netstudent-02-8db47dd8c98a**</ins>  from <ins>**netstudent-02-8db47dd8c98a@qwiklabs.net**</ins>
+
+```yaml
+git config --global user.email "you@example.com"              # Email
+git config --global user.name "student..."                     # Username
+```
+
+```yaml
+git add .
+git commit -m "built pipeline init"
+git push
+
+```
+* Go to Jenkins Tab, click Build and wait to get score.
+* It will take Approx <ins>5 - 10</ins> mins to build.
+
+
 
 
 ## **✨Congratulations✨** you have completed Your Challenge lab Succesfully.🎉🎉
