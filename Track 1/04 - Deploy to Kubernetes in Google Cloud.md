@@ -1,5 +1,3 @@
-#Still in progress
-
 # Perform Foundational Infrastructure Tasks in Google Cloud: Challenge Lab
 
 > Launch the lab [here](https://www.qwiklabs.com/focuses/12068?parent=catalog)
