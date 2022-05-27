@@ -67,7 +67,7 @@ gcloud sql instances create griffin-dev-db --root-password password --region=us-
 
 gcloud sql connect griffin-dev-db --user=root
 ```
-**Enter Password as  <ins>password</ins>   (all Lower Case)
+* Enter Password as  <ins>password</ins>   (all Lower Case)
 
 ```yaml
 CREATE DATABASE wordpress;
@@ -78,7 +78,7 @@ CREATE USER "wp_user"@"%" IDENTIFIED BY "stormwind_rules";
 GRANT ALL PRIVILEGES ON wordpress.* TO "wp_user"@"%" IDENTIFIED BY "stormwind_rules"; 
 ```
 
-**(if you are getting error here, ignore it).
+* (if you are getting error here, ignore it).
 
 ```yaml
 FLUSH PRIVILEGES;
