@@ -83,7 +83,9 @@ GRANT ALL PRIVILEGES ON wordpress.* TO "wp_user"@"%" IDENTIFIED BY "stormwind_ru
 ```yaml
 FLUSH PRIVILEGES;
 ```
-
+```yaml
+EXIT
+```
 
 ## Task 5 : Create Kubernetes cluster.
 
