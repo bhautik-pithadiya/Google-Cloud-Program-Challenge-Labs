@@ -64,7 +64,7 @@ git checkout -b new-feature
 ```
 * Press Open Editor on the Cloud Shell Terminal -> Open sample-app floder.
 * Edit main.go file -> change * const version string *  from 1.0.0 to 2.0.1 (Check the value under the 2nd Task ) -> Save it.
-* Edit html.go file -> Change * <div class="card _____"> * to * <div class="card red"> *
+* Edit html.go file -> Change * div class="card _____" * to * div class="card red" *
  * After this command make the required changes!
 ```yaml
 git add Jenkinsfile html.go main.go
@@ -73,6 +73,7 @@ git push origin new-feature
 ```
 3rd Task ----------
 
+```yaml
 curl http://localhost:8001/api/v1/namespaces/new-feature/services/gceme-frontend:80/proxy/version
 kubectl get service gceme-frontend -n production  
 git checkout -b canary
@@ -81,18 +82,20 @@ export FRONTEND_SERVICE_IP=$(kubectl get -o \
 jsonpath="{.status.loadBalancer.ingress[0].ip}" --namespace=production services gceme-frontend)
 git checkout master
 git push origin master
-
+```
 4rth Task -------
-
+```yaml
 export FRONTEND_SERVICE_IP=$(kubectl get -o \
 jsonpath="{.status.loadBalancer.ingress[0].ip}" --namespace=production services gceme-frontend)
 while true; do curl http://$FRONTEND_SERVICE_IP/version; sleep 1; done
-
+```
+```yaml
 kubectl get service gceme-frontend -n production
-
+```
+```yaml
 git merge canary
 git push origin master
 export FRONTEND_SERVICE_IP=$(kubectl get -o \
 jsonpath="{.status.loadBalancer.ingress[0].ip}" --namespace=production services gceme-frontend)
-
+```
 DONE --------
